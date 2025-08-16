@@ -1,0 +1,11 @@
+.skill-item:hover {
+  transform: scale(1.05);
+  transition: all 0.3s ease;
+}
+
+.gradient-text {
+  background: linear-gradient(90deg, #4f46e5, #ec4899);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
