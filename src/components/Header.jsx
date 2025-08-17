@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   FaTools,
   FaFolderOpen,
@@ -7,109 +7,108 @@ import {
   FaLaptopCode,
   FaHome,
   FaBars,
-} from "react-icons/fa";   
-import "./Header.css";
+  FaTimes,
+} from "react-icons/fa";
 
 const Header = () => {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false);
+  };
+
+  const navItems = [
+    { href: "/", label: "خانه", icon: <FaHome /> },
+    { href: "#portfolio", label: "پروژه ها", icon: <FaFolderOpen /> },
+    { href: "#skills", label: "مهارت‌ها", icon: <FaTools /> },
+    { href: "#about", label: "درباره من", icon: <FaUser /> },
+    { href: "#contact", label: "تماس با من", icon: <FaEnvelope /> },
+    { href: "/learn", label: "آموزش برنامه نویسی", icon: <FaLaptopCode /> },
+  ];
+
   return (
-    <header className="bg-white">
-      <nav className="fixed w-full bg-white shadow-md z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
-            <div className="flex  items-center">
-              <a href="/" className="text-xl font-bold gradient-text">
-                کاپیتان کد
-              </a>
-            </div>
+    <header className={`fixed w-full z-50 transition-all duration-300 ${
+      isScrolled 
+        ? 'bg-white/95 backdrop-blur-md shadow-lg' 
+        : 'bg-white/90 backdrop-blur-sm'
+    }`}>
+      <nav className="container-max">
+        <div className="flex justify-between items-center h-16 px-4 sm:px-6 lg:px-8">
+          {/* Logo */}
+          <div className="flex items-center">
+            <a 
+              href="/" 
+              className="text-2xl font-bold gradient-text hover:scale-105 transition-transform duration-300"
+            >
+              کاپیتان کد
+            </a>
+          </div>
 
-            <div className="hidden md:flex items-center space-x-12 space-x-reverse">
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center space-x-8 space-x-reverse">
+            {navItems.map((item, index) => (
               <a
-                href="/"
-                className="nav-link text-sm active-link text-gray-700 hover:text-purple-600"
+                key={index}
+                href={item.href}
+                onClick={closeMobileMenu}
+                className="nav-link flex items-center space-x-2 space-x-reverse text-sm font-medium text-gray-700 hover:text-primary-600 transition-colors duration-300 group"
               >
-                خانه
+                <span className="group-hover:scale-110 transition-transform duration-300">
+                  {item.icon}
+                </span>
+                <span>{item.label}</span>
               </a>
+            ))}
+          </div>
 
-              <a
-                href="#portfolio"
-                className="nav-link text-sm text-gray-700 hover:text-purple-600"
-              >
-                پروژه ها
-              </a>
-              <a
-                href="#skills"
-                className="nav-link text-sm text-gray-700 hover:text-purple-600"
-              >
-                مهارت‌ها
-              </a>
-              <a
-                href="#about"
-                className="nav-link text-sm text-gray-700 hover:text-purple-600"
-              >
-                درباره من
-              </a>
-              <a
-                href="#contact"
-                className="nav-link text-sm ml-5 text-gray-700 hover:text-purple-600"
-              >
-                تماس با من
-              </a>
-              <a
-                href="/learn"
-                className="nav-link text-sm text-gray-700 hover:text-purple-600"
-              >
-                آموزش برنامه نویسی
-              </a>
-            </div>
-
-            <div className="md:hidden flex items-center">
-              <button id="mobile-menu-button" className="text-gray-700">
-                <i class=" text-2xl">
-                  <FaBars />
-                </i>
-              </button>
-            </div>
+          {/* Mobile Menu Button */}
+          <div className="md:hidden flex items-center">
+            <button 
+              onClick={toggleMobileMenu}
+              className="text-gray-700 hover:text-primary-600 transition-colors duration-300 p-2"
+              aria-label="Toggle mobile menu"
+            >
+              {isMobileMenuOpen ? (
+                <FaTimes className="text-xl" />
+              ) : (
+                <FaBars className="text-xl" />
+              )}
+            </button>
           </div>
         </div>
 
-        <div id="mobile-menu" class="hidden md:hidden bg-white shadow-lg">
-          <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 space-x-reverse">
-            <a
-              href="/"
-              class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-purple-600 hover:bg-gray-100"
-            >
-              خانه
-            </a>
-            <a
-              href="#about"
-              class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-purple-600 hover:bg-gray-100"
-            >
-              درباره من
-            </a>
-            <a
-              href="#portfolio"
-              class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-purple-600 hover:bg-gray-100"
-            >
-              پروژه ها
-            </a>
-            <a
-              href="#skills"
-              class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-purple-600 hover:bg-gray-100"
-            >
-              مهارت ها
-            </a>
-            <a
-              href="#contact"
-              class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-purple-600 hover:bg-gray-100"
-            >
-              تماس با من
-            </a>
-            <a
-              href="/learn"
-              class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-purple-600 hover:bg-gray-100"
-            >
-              آمورش برنامه نویسی
-            </a>
+        {/* Mobile Menu */}
+        <div className={`md:hidden transition-all duration-300 ease-in-out ${
+          isMobileMenuOpen 
+            ? 'max-h-96 opacity-100' 
+            : 'max-h-0 opacity-0'
+        } overflow-hidden bg-white shadow-lg`}>
+          <div className="px-4 py-2 space-y-1">
+            {navItems.map((item, index) => (
+              <a
+                key={index}
+                href={item.href}
+                onClick={closeMobileMenu}
+                className="flex items-center space-x-3 space-x-reverse px-3 py-3 rounded-lg text-base font-medium text-gray-700 hover:text-primary-600 hover:bg-primary-50 transition-all duration-300"
+              >
+                <span className="text-lg">{item.icon}</span>
+                <span>{item.label}</span>
+              </a>
+            ))}
           </div>
         </div>
       </nav>
